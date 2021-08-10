@@ -1,8 +1,13 @@
-import { FETCH_CATEGORY_VALUES, FETCH_SUBCATEGORY_VALUES } from "../actions/ProductsAction";
+import {
+  FETCH_CATEGORY_VALUES,
+  FETCH_SUBCATEGORY_VALUES,
+  FETCH_PRODUCT_VALUES,
+} from "../actions/ProductsAction";
 
 const INITIAL_STATE = {
   categories: [],
-  subcategories: []
+  subcategories: [],
+  products: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -10,8 +15,11 @@ export default (state = INITIAL_STATE, action) => {
     case FETCH_CATEGORY_VALUES:
       return { ...state, categories: action.payload };
 
-    case FETCH_SUBCATEGORY_VALUES: 
-      return { ...state, subcategories: action.payload};
+    case FETCH_SUBCATEGORY_VALUES:
+      return { ...state, subcategories: action.payload };
+
+    case FETCH_PRODUCT_VALUES:
+      return { ...state, products: action.payload };
 
     default:
       return state;

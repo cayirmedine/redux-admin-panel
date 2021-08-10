@@ -1,22 +1,13 @@
 import React, { Component } from "react";
-import { api } from "../api";
+import { connect } from "react-redux";
+import { fetchProducts } from "../actions/ProductsAction";
 import { Button, Table, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 class ProductList extends Component {
-  state = {
-    products: [],
-  };
 
   componentDidMount() {
-    api()
-      .get("/products")
-      .then((response) => {
-        this.setState({ products: response.data });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.fetchProducts();
   }
 
   render() {
@@ -44,7 +35,7 @@ class ProductList extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {this.state.products.map((product) => {
+            {this.props.products.map((product) => {
               return (
                 <Table.Row key={product.id}>
                   <Table.Cell>{product.id}</Table.Cell>
@@ -94,4 +85,11 @@ class ProductList extends Component {
   }
 }
 
-export default ProductList;
+const mapStateToProps = state => {
+  const { products } = state.ProductsReducer;
+  return {
+    products
+  }
+}
+
+export default connect(mapStateToProps, { fetchProducts })(ProductList);
