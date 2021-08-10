@@ -2,12 +2,14 @@ import {
   FETCH_CATEGORY_VALUES,
   FETCH_SUBCATEGORY_VALUES,
   FETCH_PRODUCT_VALUES,
+  FETCH_CAMPAIGN_VALUES,
 } from "../actions/ProductsAction";
 
 const INITIAL_STATE = {
   categories: [],
   subcategories: [],
   products: [],
+  campaigns: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -20,6 +22,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case FETCH_PRODUCT_VALUES:
       return { ...state, products: action.payload };
+
+    case FETCH_CAMPAIGN_VALUES:
+      return { ...state, campaigns: action.payload };
 
     default:
       return state;

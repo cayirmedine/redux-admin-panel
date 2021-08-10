@@ -1,22 +1,13 @@
 import React, { Component } from "react";
-import { api } from "../api";
+import { connect } from "react-redux";
+import { fetchCampaigns } from "../actions/ProductsAction";
 import { Button, Icon, Table } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 
 class CampaignList extends Component {
-  state = {
-    campaigns: [],
-  };
 
   componentDidMount() {
-    api()
-      .get("/campaigns")
-      .then((response) => {
-        this.setState({ campaigns: response.data });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.fetchCampaigns();
   }
 
   render() {
@@ -47,7 +38,7 @@ class CampaignList extends Component {
           </Table.Header>
 
           <Table.Body>
-            {this.state.campaigns.map((campaign) => {
+            {this.props.campaigns.map((campaign) => {
               return (
                 <Table.Row key={campaign.id}>
                   <Table.Cell>{campaign.id}</Table.Cell>
@@ -101,4 +92,12 @@ class CampaignList extends Component {
   }
 }
 
-export default CampaignList;
+const mapStateToProps = state => {
+  const { campaigns } = state.ProductsReducer;
+
+  return {
+    campaigns
+  }
+}
+
+export default connect(mapStateToProps, { fetchCampaigns })(CampaignList);

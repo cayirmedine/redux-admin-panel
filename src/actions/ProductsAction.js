@@ -3,6 +3,7 @@ import { api } from "../api";
 export const FETCH_CATEGORY_VALUES = "FETCH_CATEGORY_VALUES";
 export const FETCH_SUBCATEGORY_VALUES = "FETCH_SUBCATEGORY_VALUES";
 export const FETCH_PRODUCT_VALUES = "FETCH_PRODUCT_VALUES";
+export const FETCH_CAMPAIGN_VALUES = "FETCH_CAMPAIGN_VALUES";
 
 export const fetchCategories = () => {
   return (dispatch) => {
@@ -44,11 +45,27 @@ export const fetchProducts = () => {
       .then((response) => {
         dispatch({
           type: FETCH_PRODUCT_VALUES,
-          payload: response.data
-        })
+          payload: response.data,
+        });
       })
       .catch((error) => {
         console.log(error);
       });
-  }
-}
+  };
+};
+
+export const fetchCampaigns = () => {
+  return (dispatch) => {
+    api()
+      .get("/campaigns")
+      .then((response) => {
+        dispatch({
+          type: FETCH_CAMPAIGN_VALUES,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+};
