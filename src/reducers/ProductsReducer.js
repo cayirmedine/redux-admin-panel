@@ -3,6 +3,7 @@ import {
   FETCH_SUBCATEGORY_VALUES,
   FETCH_PRODUCT_VALUES,
   FETCH_CAMPAIGN_VALUES,
+  ADD_CATEGORY,
 } from "../actions/ProductsAction";
 
 const INITIAL_STATE = {
@@ -10,6 +11,7 @@ const INITIAL_STATE = {
   subcategories: [],
   products: [],
   campaigns: [],
+  categoryInfo: { title: "", image: null },
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -25,6 +27,15 @@ export default (state = INITIAL_STATE, action) => {
 
     case FETCH_CAMPAIGN_VALUES:
       return { ...state, campaigns: action.payload };
+
+    case ADD_CATEGORY:
+      return {
+        ...state,
+        categoryInfo: {
+          ...state.categoryInfo,
+          categories: [...state.categories, action.payload],
+        },
+      };
 
     default:
       return state;

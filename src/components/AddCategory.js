@@ -1,36 +1,27 @@
-import { api } from "../api";
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { addCategory } from "../actions/ProductsAction";
 import { Button, Form, Segment } from "semantic-ui-react";
 
 var formData = new FormData();
 
 class AddCategory extends Component {
 
-  state = {
-    title: "",
-    image: null
-  };
-
   onInputChange = (e) => {
-    this.setState({ title: e.target.value })
+    this.props.categoryInfo.title = e.target.value;
   };
 
   handleImage = (e) => {
     if (e.target && e.target.files[0]) {
-      this.setState({ image: e.target.files[0] })
+      this.props.categoryInfo.image = e.target.files[0];
     }
     console.log(e.target.files[0]);
   };
 
   onFormSubmit = (event) => {
-    formData.set("title", this.state.title);
-    formData.set("image", this.state.image);
-    api()
-      .post("/categories", formData, {
-        headers: { "content-type": "multipart/form-data" },
-      })
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
+    formData.set("title", this.props.categoryInfo.title);
+    formData.set("image", this.props.categoryInfo.image);
+    this.props.addCategory(formData);
   };
 
   render() {
@@ -69,4 +60,11 @@ class AddCategory extends Component {
   }
 }
 
-export default AddCategory;
+const mapStateToProps = state => {
+  const { categoryInfo } = state.ProductsReducer;
+  return {
+    categoryInfo
+  }
+}
+
+export default connect(mapStateToProps, { addCategory })(AddCategory);

@@ -4,6 +4,7 @@ export const FETCH_CATEGORY_VALUES = "FETCH_CATEGORY_VALUES";
 export const FETCH_SUBCATEGORY_VALUES = "FETCH_SUBCATEGORY_VALUES";
 export const FETCH_PRODUCT_VALUES = "FETCH_PRODUCT_VALUES";
 export const FETCH_CAMPAIGN_VALUES = "FETCH_CAMPAIGN_VALUES";
+export const ADD_CATEGORY = "ADD_CATEGORY";
 
 export const fetchCategories = () => {
   return (dispatch) => {
@@ -69,3 +70,17 @@ export const fetchCampaigns = () => {
       });
   };
 };
+
+export const addCategory = (formData) => {
+  return (dispatch) => {
+    api()
+      .post("/categories", formData, {
+        headers: { "content-type": "multipart/form-data" },
+      })
+      .then((response) => dispatch({
+        type: ADD_CATEGORY,
+        payload: response.data
+      }))
+      .catch((err) => console.log(err));
+  }
+}
