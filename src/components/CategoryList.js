@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchCategories } from "../actions/ProductsAction"
+import { fetchCategories } from "../actions/ProductsAction";
 import { Button, Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 class CategoryList extends Component {
-
   componentDidMount() {
-    this.props.fetchCategories()
+    this.props.fetchCategories();
   }
 
   render() {
@@ -52,8 +51,7 @@ class CategoryList extends Component {
                       as={Link}
                       to={{
                         pathname: `/edit-category/${category.id}`,
-                        title: category.title
-                        
+                        title: category.title,
                       }}
                       icon="blue edit outline"
                       basic
@@ -72,11 +70,11 @@ class CategoryList extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { categories } = state.ProductsReducer;
   return {
-    categories
-  }
-}
+    categories,
+  };
+};
 
 export default connect(mapStateToProps, { fetchCategories })(CategoryList);
