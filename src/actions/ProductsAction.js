@@ -4,7 +4,12 @@ export const FETCH_CATEGORY_VALUES = "FETCH_CATEGORY_VALUES";
 export const FETCH_SUBCATEGORY_VALUES = "FETCH_SUBCATEGORY_VALUES";
 export const FETCH_PRODUCT_VALUES = "FETCH_PRODUCT_VALUES";
 export const FETCH_CAMPAIGN_VALUES = "FETCH_CAMPAIGN_VALUES";
-export const ADD_CATEGORY = "ADD_CATEGORY";
+export const ADD_CATEGORY_CLICK   = "ADD_CATEGORY_CLICK";
+export const ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_SUCCESS";
+export const ADD_CATEGORY_FAILED  = "ADD_CATEGORY_FAILED";
+export const ADD_SUBCATEGORY_CLICK   = "ADD_SUBCATEGORY_CLICK";
+export const ADD_SUBCATEGORY_SUCCESS = "ADD_SUBCATEGORY_SUCCESS";
+export const ADD_SUBCATEGORY_FAILED  = "ADD_SUBCATEGORY_FAILED";
 
 export const fetchCategories = () => {
   return (dispatch) => {
@@ -27,7 +32,6 @@ export const fetchSubCategories = () => {
     api()
       .get("/sub-categories")
       .then((response) => {
-        // this.setState({ subcategories: response.data });
         dispatch({
           type: FETCH_SUBCATEGORY_VALUES,
           payload: response.data,
@@ -73,14 +77,48 @@ export const fetchCampaigns = () => {
 
 export const addCategory = (formData) => {
   return (dispatch) => {
+
+    dispatch({
+      type: ADD_CATEGORY_CLICK
+    })
+
     api()
       .post("/categories", formData, {
         headers: { "content-type": "multipart/form-data" },
       })
-      .then((response) => dispatch({
-        type: ADD_CATEGORY,
-        payload: response.data
-      }))
-      .catch((err) => console.log(err));
+      .then((response) => {
+        console.log(`response`, response)
+        dispatch({
+          type: ADD_CATEGORY_SUCCESS,
+          payload:{ data: response.data, redirectUrl: "/categories"},
+        })
+      })
+      .catch((err) => {
+        dispatch({
+          type: ADD_CATEGORY_FAILED,
+        })
+      });
+  };
+};
+
+export const addSubCategory = (subCategoryValues) => {
+  return (dispatch) => {
+    dispatch({
+      type: ADD_SUBCATEGORY_CLICK
+    })
+
+    api()
+      .post("/sub-categories", subCategoryValues)
+      .then((response) => {
+        dispatch({
+          type: ADD_SUBCATEGORY_SUCCESS,
+          payload:{ data: response.data, redirectUrl: "/sub-categories"},
+        })
+      })
+      .catch((err) => {
+        dispatch({
+          type: ADD_SUBCATEGORY_FAILED
+        })
+      });
   }
 }

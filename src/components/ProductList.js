@@ -35,7 +35,7 @@ class ProductList extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {this.props.products.map((product) => {
+            {this.props.productsValues.map((product) => {
               return (
                 <Table.Row key={product.id}>
                   <Table.Cell>{product.id}</Table.Cell>
@@ -86,9 +86,9 @@ class ProductList extends Component {
 }
 
 const mapStateToProps = state => {
-  const { products } = state.ProductsReducer;
+  const { productsValues } = state.ProductsReducer;
   return {
-    products
+    productsValues
   }
 }
 

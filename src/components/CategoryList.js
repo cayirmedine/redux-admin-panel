@@ -33,7 +33,7 @@ class CategoryList extends Component {
           </Table.Header>
 
           <Table.Body>
-            {this.props.categories.map((category) => {
+            {this.props.categoriesValues.map((category) => {
               return (
                 <Table.Row key={category.id}>
                   <Table.Cell>{category.id}</Table.Cell>
@@ -71,9 +71,10 @@ class CategoryList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { categories } = state.ProductsReducer;
+  const { categoriesValues, redirectUrlValue } = state.ProductsReducer;
   return {
-    categories,
+    categoriesValues,
+    redirectUrlValue
   };
 };
 

@@ -38,7 +38,7 @@ class CampaignList extends Component {
           </Table.Header>
 
           <Table.Body>
-            {this.props.campaigns.map((campaign) => {
+            {this.props.campaignsValues.map((campaign) => {
               return (
                 <Table.Row key={campaign.id}>
                   <Table.Cell>{campaign.id}</Table.Cell>
@@ -93,10 +93,10 @@ class CampaignList extends Component {
 }
 
 const mapStateToProps = state => {
-  const { campaigns } = state.ProductsReducer;
+  const { campaignsValues } = state.ProductsReducer;
 
   return {
-    campaigns
+    campaignsValues
   }
 }
 

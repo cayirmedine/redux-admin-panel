@@ -1,30 +1,42 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addCategory } from "../actions/ProductsAction";
-import { Button, Form, Segment } from "semantic-ui-react";
-
-var formData = new FormData();
+import { Button, Form, Segment, Input } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
 
 class AddCategory extends Component {
-
-  onInputChange = (e) => {
-    this.props.categoryInfo.title = e.target.value;
+  state = {
+    categoryTitleValue: "",
+    categoryImage: null,
   };
 
-  handleImage = (e) => {
+  onCategoryTitleChange = (e, { value }) => {
+    this.setState({ categoryTitleValue: value });
+  };
+
+  handleCategoryImage = (e) => {
     if (e.target && e.target.files[0]) {
-      this.props.categoryInfo.image = e.target.files[0];
+      this.setState({ categoryImage: e.target.files[0] });
     }
     console.log(e.target.files[0]);
   };
 
   onFormSubmit = (event) => {
-    formData.set("title", this.props.categoryInfo.title);
-    formData.set("image", this.props.categoryInfo.image);
+    let formData = new FormData();
+    formData.append("title", this.state.categoryTitleValue);
+    formData.append("image", this.state.categoryImage);
     this.props.addCategory(formData);
   };
 
   render() {
+    const {
+      productCategoriesSpinnerValue,
+      redirectUrlValue,
+    } = this.props;
+    if (redirectUrlValue) {
+      return <Redirect to={redirectUrlValue} />;
+    }
+
     return (
       <div>
         <Segment
@@ -35,19 +47,24 @@ class AddCategory extends Component {
             marginRight: "10em",
           }}
         >
-          <Form>
-            <Form.Field>
-              <label>Title</label>
-              <input
-                placeholder="Title"
-                name="title"
-                onChange={this.onInputChange}
-              />
-            </Form.Field>
+          <Form loading={productCategoriesSpinnerValue}>
+
+            <Form.Field
+              placeholder="Title"
+              id="cat-title"
+              label="Title"
+              onChange={this.onCategoryTitleChange}
+              control={Input}
+            ></Form.Field>
 
             <Form.Field>
               <label>Image</label>
-              <input type="file" name="image" onChange={this.handleImage} />
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={this.handleCategoryImage}
+              />
             </Form.Field>
 
             <Button type="submit" onClick={this.onFormSubmit}>
@@ -60,11 +77,19 @@ class AddCategory extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { categoryInfo } = state.ProductsReducer;
+const mapStateToProps = (state) => {
+  const {
+    productCategoriesSpinnerValue,
+    redirectUrlValue,
+    // productCategoryTitleErrorValue,
+    // productCategoryImageErrorValue,
+  } = state.ProductsReducer;
   return {
-    categoryInfo
-  }
-}
+    productCategoriesSpinnerValue,
+    redirectUrlValue,
+    // productCategoryTitleErrorValue,
+    // productCategoryImageErrorValue,
+  };
+};
 
 export default connect(mapStateToProps, { addCategory })(AddCategory);

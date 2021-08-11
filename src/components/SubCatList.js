@@ -31,7 +31,7 @@ class SubCatList extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {this.props.subcategories.map((subcategory) => {
+            {this.props.subcategoriesValues.map((subcategory) => {
               return (
                 <Table.Row key={subcategory.id}>
                   <Table.Cell>{subcategory.id}</Table.Cell>
@@ -62,9 +62,9 @@ class SubCatList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { subcategories } = state.ProductsReducer;
+  const { subcategoriesValues } = state.ProductsReducer;
   return {
-    subcategories,
+    subcategoriesValues,
   };
 };
 
