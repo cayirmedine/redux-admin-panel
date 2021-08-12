@@ -62,9 +62,10 @@ class SubCatList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { subcategoriesValues } = state.ProductsReducer;
+  const { subcategoriesValues, redirectUrlValue } = state.ProductsReducer;
   return {
     subcategoriesValues,
+    redirectUrlValue
   };
 };
 

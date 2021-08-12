@@ -86,9 +86,10 @@ class ProductList extends Component {
 }
 
 const mapStateToProps = state => {
-  const { productsValues } = state.ProductsReducer;
+  const { productsValues, redirectUrlValue } = state.ProductsReducer;
   return {
-    productsValues
+    productsValues,
+    redirectUrlValue
   }
 }
 

@@ -4,12 +4,16 @@ export const FETCH_CATEGORY_VALUES = "FETCH_CATEGORY_VALUES";
 export const FETCH_SUBCATEGORY_VALUES = "FETCH_SUBCATEGORY_VALUES";
 export const FETCH_PRODUCT_VALUES = "FETCH_PRODUCT_VALUES";
 export const FETCH_CAMPAIGN_VALUES = "FETCH_CAMPAIGN_VALUES";
-export const ADD_CATEGORY_CLICK   = "ADD_CATEGORY_CLICK";
+export const FETCH_CATEGORY_SUB_CAT_VALUES = "FETCH_CATEGORY_SUB_CAT_VALUES";
+export const ADD_CATEGORY_CLICK = "ADD_CATEGORY_CLICK";
 export const ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_SUCCESS";
-export const ADD_CATEGORY_FAILED  = "ADD_CATEGORY_FAILED";
-export const ADD_SUBCATEGORY_CLICK   = "ADD_SUBCATEGORY_CLICK";
+export const ADD_CATEGORY_FAILED = "ADD_CATEGORY_FAILED";
+export const ADD_SUBCATEGORY_CLICK = "ADD_SUBCATEGORY_CLICK";
 export const ADD_SUBCATEGORY_SUCCESS = "ADD_SUBCATEGORY_SUCCESS";
-export const ADD_SUBCATEGORY_FAILED  = "ADD_SUBCATEGORY_FAILED";
+export const ADD_SUBCATEGORY_FAILED = "ADD_SUBCATEGORY_FAILED";
+export const ADD_PRODUCT_CLICK = "ADD_PRODUCT_CLICK";
+export const ADD_PRODUCT_SUCCESS = "ADD_PRODUCT_SUCCESS";
+export const ADD_PRODUCT_FAILED = "ADD_PRODUCT_FAILED";
 
 export const fetchCategories = () => {
   return (dispatch) => {
@@ -75,28 +79,42 @@ export const fetchCampaigns = () => {
   };
 };
 
-export const addCategory = (formData) => {
+export const fetchCatsSubCats = (catId) => {
   return (dispatch) => {
+    api()
+      .get(`/sub-categories-cat/${catId}}`)
+      .then((response) => {
+        dispatch({
+          type: FETCH_CATEGORY_SUB_CAT_VALUES,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+};
 
+export const addCategory = (categoryFormData) => {
+  return (dispatch) => {
     dispatch({
-      type: ADD_CATEGORY_CLICK
-    })
+      type: ADD_CATEGORY_CLICK,
+    });
 
     api()
-      .post("/categories", formData, {
+      .post("/categories", categoryFormData, {
         headers: { "content-type": "multipart/form-data" },
       })
       .then((response) => {
-        console.log(`response`, response)
         dispatch({
           type: ADD_CATEGORY_SUCCESS,
-          payload:{ data: response.data, redirectUrl: "/categories"},
-        })
+          payload: { data: response.data, redirectUrl: "/categories" },
+        });
       })
       .catch((err) => {
         dispatch({
           type: ADD_CATEGORY_FAILED,
-        })
+        });
       });
   };
 };
@@ -104,21 +122,45 @@ export const addCategory = (formData) => {
 export const addSubCategory = (subCategoryValues) => {
   return (dispatch) => {
     dispatch({
-      type: ADD_SUBCATEGORY_CLICK
-    })
+      type: ADD_SUBCATEGORY_CLICK,
+    });
 
     api()
       .post("/sub-categories", subCategoryValues)
       .then((response) => {
         dispatch({
           type: ADD_SUBCATEGORY_SUCCESS,
-          payload:{ data: response.data, redirectUrl: "/sub-categories"},
-        })
+          payload: { data: response.data, redirectUrl: "/sub-categories" },
+        });
       })
       .catch((err) => {
         dispatch({
-          type: ADD_SUBCATEGORY_FAILED
-        })
+          type: ADD_SUBCATEGORY_FAILED,
+        });
       });
-  }
-}
+  };
+};
+
+export const addProduct = (productFormData) => {
+  return (dispatch) => {
+    dispatch({
+      type: ADD_PRODUCT_CLICK,
+    });
+
+    api()
+      .post("/products", productFormData, {
+        headers: { "content-type": "multipart/form-data" },
+      })
+      .then((response) => {
+        dispatch({
+          type: ADD_PRODUCT_SUCCESS,
+          payload: { data: response.data, redirectUrl: "/products" },
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: ADD_PRODUCT_FAILED,
+        });
+      });
+  };
+};
