@@ -18,14 +18,22 @@ class AddProduct extends Component {
     productsCatID: null,
     productSubCatID: null,
     productImages: [],
-    productOptionsCat: [],
-    productOptionsSubCat: [],
   };
 
+  // productOptionsCat= [];
+  // productOptionsSubCat= [];
   fileArr = [];
 
   componentDidMount() {
     this.props.fetchCategories();
+
+    // this.props.categoriesValues.map((cat) =>
+    //   this.productOptionsCat.push({
+    //     id: cat.id,
+    //     text: cat.title,
+    //     value: cat.id,
+    //   })
+    // );
   }
 
   onProductTitleChange = (e, { value }) => {
@@ -58,7 +66,8 @@ class AddProduct extends Component {
     //     );
     //   });
 
-    await this.props.fetchCatsSubCats(this.state.productsCatID);
+    this.props.fetchCatsSubCats(this.state.productsCatID);
+
   };
 
   onProductsSubCatIDChange = async (e, { value }) => {
@@ -92,30 +101,11 @@ class AddProduct extends Component {
   };
 
   render() {
-    const { productSpinnerValue, redirectUrlValue, catSubCategoriesValues } =
-      this.props;
+    const { productSpinnerValue, redirectUrlValue } = this.props;
 
     if (redirectUrlValue) {
       return <Redirect to={redirectUrlValue} />;
     }
-
-    if (catSubCategoriesValues) {
-      this.props.catSubCategoriesValues.map((subCat) =>
-        this.state.productOptionsSubCat.push({
-          id: subCat.id,
-          text: subCat.title,
-          value: subCat.id,
-        })
-      );
-    }
-    
-    this.props.categoriesValues.map((cat) =>
-      this.state.productOptionsCat.push({
-        id: cat.id,
-        text: cat.title,
-        value: cat.id,
-      })
-    );
 
     return (
       <div
@@ -152,7 +142,7 @@ class AddProduct extends Component {
                 fluid
                 name="cat_id"
                 label="Category"
-                options={this.state.productOptionsCat}
+                options={this.props.productOptionsCat}
                 placeholder="Category"
                 onChange={this.onProductsCatIDChange}
               />
@@ -162,7 +152,7 @@ class AddProduct extends Component {
                 fluid
                 name="subCat_id"
                 label="SubCategory"
-                options={this.state.productOptionsSubCat}
+                options={this.props.productOptionsSubCat}
                 placeholder="SubCategory"
                 onChange={this.onProductsSubCatIDChange}
               />
@@ -188,6 +178,7 @@ class AddProduct extends Component {
 }
 
 const mapStateToProps = (state) => {
+  var _ = require("lodash");
   const {
     productSpinnerValue,
     redirectUrlValue,
@@ -195,11 +186,31 @@ const mapStateToProps = (state) => {
     catSubCategoriesValues,
   } = state.ProductsReducer;
 
+  let productOptionsCat = _.map(
+    state.ProductsReducer.categoriesValues,
+    (val) => ({
+      id: val.id,
+      text: val.title,
+      value: val.id,
+    })
+  );
+
+  let productOptionsSubCat = _.map(
+    state.ProductsReducer.catSubCategoriesValues,
+    (val) => ({
+      id: val.id,
+      text: val.title,
+      value: val.id,
+    })
+  );
+
   return {
     productSpinnerValue,
     redirectUrlValue,
     categoriesValues,
     catSubCategoriesValues,
+    productOptionsCat,
+    productOptionsSubCat
   };
 };
 
