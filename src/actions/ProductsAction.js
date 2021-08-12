@@ -14,6 +14,9 @@ export const ADD_SUBCATEGORY_FAILED = "ADD_SUBCATEGORY_FAILED";
 export const ADD_PRODUCT_CLICK = "ADD_PRODUCT_CLICK";
 export const ADD_PRODUCT_SUCCESS = "ADD_PRODUCT_SUCCESS";
 export const ADD_PRODUCT_FAILED = "ADD_PRODUCT_FAILED";
+export const ADD_CAMPAIGN_CLICK = "ADD_CATEGORY_CLICK";
+export const ADD_CAMPAIGN_SUCCESS = "ADD_CATEGORY_SUCCESS";
+export const ADD_CAMPAIGN_FAILED = "ADD_CATEGORY_FAILED";
 
 export const fetchCategories = () => {
   return (dispatch) => {
@@ -162,5 +165,29 @@ export const addProduct = (productFormData) => {
           type: ADD_PRODUCT_FAILED,
         });
       });
+  };
+};
+
+export const addCampaign = (campaignFormData) => {
+  return (dispatch) => {
+    dispatch({
+      type: ADD_CAMPAIGN_CLICK,
+    });
+
+    api()
+      .post("/campaigns", campaignFormData, {
+        headers: { "content-type": "multipart/form-data" },
+      })
+      .then((response) => {
+        dispatch({
+          type: ADD_CAMPAIGN_SUCCESS,
+          payload: { data: response.data, redirectUrl: "/campaigns" },
+        });
+      })
+      .catch((err) =>
+        dispatch({
+          type: ADD_CAMPAIGN_FAILED,
+        })
+      );
   };
 };

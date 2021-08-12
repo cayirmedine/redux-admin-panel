@@ -93,10 +93,11 @@ class CampaignList extends Component {
 }
 
 const mapStateToProps = state => {
-  const { campaignsValues } = state.ProductsReducer;
+  const { campaignsValues, redirectUrlValue } = state.ProductsReducer;
 
   return {
-    campaignsValues
+    campaignsValues,
+    redirectUrlValue
   }
 }
 

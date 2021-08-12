@@ -13,6 +13,9 @@ import {
   ADD_PRODUCT_CLICK,
   ADD_PRODUCT_SUCCESS,
   ADD_PRODUCT_FAILED,
+  ADD_CAMPAIGN_CLICK,
+  ADD_CAMPAIGN_SUCCESS,
+  ADD_CAMPAIGN_FAILED
 } from "../actions/ProductsAction";
 
 const INITIAL_STATE = {
@@ -24,6 +27,7 @@ const INITIAL_STATE = {
   productCategoriesSpinnerValue: false,
   productSubCategoriesSpinnerValue: false,
   productSpinnerValue: false,
+  productCampaignSpinnerValue: false,
   productCategoryTitleErrorValue: "",
   productCategoryImageErrorValue: "",
   redirectUrlValue: "",
@@ -130,6 +134,29 @@ export const ProductsReducer = (state = INITIAL_STATE, action) => {
         // productSubCategoryImageErrorValue: ""
         // productsSubCategoriesErrorValues: []
       };
+
+      case ADD_CAMPAIGN_CLICK:
+        return {
+          ...state,
+          productCampaignSpinnerValue: true,
+        };
+  
+      case ADD_CAMPAIGN_SUCCESS:
+        return {
+          ...state,
+          productCampaignSpinnerValue: false,
+          redirectUrlValue: action.payload.redirectUrl,
+        };
+  
+      case ADD_CAMPAIGN_FAILED:
+        console.log("ADD_CAMPAIGN_FAILED is running");
+        return {
+          ...state,
+          productCampaignSpinnerValue: false,
+          // productSubCategoryTitleErrorValue: "",
+          // productSubCategoryImageErrorValue: ""
+          // productsSubCategoriesErrorValues: []
+        };
 
     default:
       return state;
