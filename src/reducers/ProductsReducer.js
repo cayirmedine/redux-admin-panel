@@ -24,6 +24,7 @@ const INITIAL_STATE = {
   productsValues: [],
   campaignsValues: [],
   catSubCategoriesValues: [],
+  campaignProducts: [],
   productCategoriesSpinnerValue: false,
   productSubCategoriesSpinnerValue: false,
   productSpinnerValue: false,

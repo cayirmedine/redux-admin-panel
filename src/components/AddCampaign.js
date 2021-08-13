@@ -5,6 +5,7 @@ import { Button, Form, Segment, Checkbox, Table } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 import "react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css";
 import { Redirect } from "react-router-dom";
+import ProductCheckListItems from "./ProductCheckListItems";
 
 var formData = new FormData();
 const moment = require('moment');
@@ -17,7 +18,6 @@ class AddCampaign extends Component {
     isCampaignActive: false,
     isCampaignInSlider: false,
     campaignImage: null,
-    campaignProducts: [],
   };
 
   componentDidMount() {
@@ -54,17 +54,17 @@ class AddCampaign extends Component {
     console.log(e.target.files[0]);
   };
 
-  handleClick = (e, { checked, value }) => {
-    if (checked) {
-      this.state.campaignProducts.push(value);
-      console.log(value);
-    } else {
-      if(this.state.campaignProducts.includes(value)) {
-        let index = this.state.campaignProducts.indexOf(value);
-        this.state.campaignProducts.splice(index, 1);
-      }
-    }
-  };
+  // handleClick = (e, { checked, value }) => {
+  //   if (checked) {
+  //     this.state.campaignProducts.push(value);
+  //     console.log(value);
+  //   } else {
+  //     if(this.state.campaignProducts.includes(value)) {
+  //       let index = this.state.campaignProducts.indexOf(value);
+  //       this.state.campaignProducts.splice(index, 1);
+  //     }
+  //   }
+  // };
 
   onFormSubmit = async (event) => {
     formData.set("title", this.state.campaignTitle);
@@ -73,7 +73,7 @@ class AddCampaign extends Component {
     formData.set("isActive", this.state.isCampaignActive);
     formData.set("isInSlider", this.state.isCampaignInSlider);
     formData.set("image", this.state.campaignImage);
-    this.state.campaignProducts.map(product => formData.append("products", product));
+    this.props.campaignProducts.map(product => formData.append("products", product));
 
     console.log("Title", formData.get("title"));
     console.log("Description", formData.get("description"));
@@ -83,13 +83,6 @@ class AddCampaign extends Component {
     console.log("Image", formData.get("image"));
     console.log("State Products", this.state.campaignProducts);
     console.log("Products", formData.getAll("products"));
-
-    // await api()
-    //   .post("/campaigns", formData, {
-    //     headers: { "content-type": "multipart/form-data" },
-    //   })
-    //   .then((response) => console.log(response))
-    //   .catch((err) => console.log(err));
 
     await this.props.addCampaign(formData);
 
@@ -168,16 +161,7 @@ class AddCampaign extends Component {
                 <Table.Body>
                   {this.props.productsValues.map((product) => {
                     return (
-                      <Table.Row key={product.id}>
-                        <Table.Cell>
-                          <Checkbox
-                            onClick={this.handleClick}
-                            value={product.id}
-                          />
-                        </Table.Cell>
-                        <Table.Cell>{product.id}</Table.Cell>
-                        <Table.Cell>{product.title}</Table.Cell>
-                      </Table.Row>
+                      <ProductCheckListItems product={product} />
                     );
                   })}
                 </Table.Body>
@@ -198,13 +182,15 @@ const mapStateToProps = state => {
   const {
     productCampaignSpinnerValue,
     redirectUrlValue,
-    productsValues
+    productsValues,
+    campaignProducts
   } = state.ProductsReducer;
 
   return {
     productCampaignSpinnerValue,
     redirectUrlValue,
-    productsValues
+    productsValues,
+    campaignProducts
   }
 }
 

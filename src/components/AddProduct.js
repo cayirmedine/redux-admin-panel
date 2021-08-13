@@ -20,20 +20,10 @@ class AddProduct extends Component {
     productImages: [],
   };
 
-  // productOptionsCat= [];
-  // productOptionsSubCat= [];
   fileArr = [];
 
   componentDidMount() {
     this.props.fetchCategories();
-
-    // this.props.categoriesValues.map((cat) =>
-    //   this.productOptionsCat.push({
-    //     id: cat.id,
-    //     text: cat.title,
-    //     value: cat.id,
-    //   })
-    // );
   }
 
   onProductTitleChange = (e, { value }) => {
@@ -54,20 +44,7 @@ class AddProduct extends Component {
 
     console.log(this.state.productsCatID);
 
-    // await api()
-    //   .get(`/sub-categories-cat/${this.state.productsCatID}`)
-    //   .then((res) => {
-    //     res.data.map((subCat) =>
-    //       this.state.productOptionsSubCat.push({
-    //         id: subCat.id,
-    //         text: subCat.title,
-    //         value: subCat.id,
-    //       })
-    //     );
-    //   });
-
-    this.props.fetchCatsSubCats(this.state.productsCatID);
-
+    await this.props.fetchCatsSubCats(this.state.productsCatID);
   };
 
   onProductsSubCatIDChange = async (e, { value }) => {

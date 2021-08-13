@@ -40,13 +40,6 @@ class AddSubCat extends Component {
       return <Redirect to={redirectUrlValue} />;
     }
 
-    this.props.categoriesValues.map((cat) =>
-      this.categoryOptions.push({
-        id: cat.id,
-        text: cat.title,
-        value: cat.id,
-      })
-    );
     return (
       <div
         style={{ marginTop: "1.5em", marginLeft: "1.5em", marginRight: "10em" }}
@@ -54,17 +47,17 @@ class AddSubCat extends Component {
         <Segment raised>
           <Form loading={productSubCategoriesSpinnerValue}>
             <Form.Field
-            placeholder="Title"
-            label="Title"
-            onChange={this.onSubCatTitleChange}
-            control={Input}>
-            </Form.Field>
+              placeholder="Title"
+              label="Title"
+              onChange={this.onSubCatTitleChange}
+              control={Input}
+            ></Form.Field>
             <Form.Field>
               <Form.Select
                 fluid
                 name="cat_id"
                 label="Category"
-                options={this.categoryOptions}
+                options={this.props.categoryOptions}
                 placeholder="Category"
                 onChange={this.onSubCatsCatIDChange}
               />
@@ -80,12 +73,28 @@ class AddSubCat extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { productSubCategoriesSpinnerValue, redirectUrlValue, categoriesValues } =
-    state.ProductsReducer;
+  var _ = require("lodash");
+
+  let categoryOptions = _.map(
+    state.ProductsReducer.categoriesValues,
+    (val) => ({
+      id: val.id,
+      text: val.title,
+      value: val.id,
+    })
+  );
+
+  const {
+    productSubCategoriesSpinnerValue,
+    redirectUrlValue,
+    categoriesValues,
+  } = state.ProductsReducer;
+
   return {
     productSubCategoriesSpinnerValue,
     redirectUrlValue,
-    categoriesValues
+    categoriesValues,
+    categoryOptions
   };
 };
 
