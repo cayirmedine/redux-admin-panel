@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchProducts } from "../actions/ProductsAction";
 import { Button, Table, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import DeleteProduct from "./DeleteProduct";
 
 class ProductList extends Component {
 
@@ -73,7 +74,8 @@ class ProductList extends Component {
                     icon="blue edit outline" basic />
                   </Table.Cell>
                   <Table.Cell>
-                    <Button icon="red trash alternate outline" basic />
+                    {/* <Button icon="red trash alternate outline" basic /> */}
+                    <DeleteProduct title={product.title} id={product.id} />
                   </Table.Cell>
                 </Table.Row>
               );

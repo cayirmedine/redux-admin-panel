@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchCampaigns } from "../actions/ProductsAction";
 import { Button, Icon, Table } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
+import DeleteCampaign from "./DeleteCampaign";
 
 class CampaignList extends Component {
 
@@ -80,7 +81,8 @@ class CampaignList extends Component {
                     }} icon="blue edit outline" basic />
                   </Table.Cell>
                   <Table.Cell>
-                    <Button icon="red trash alternate outline" basic />
+                    {/* <Button icon="red trash alternate outline" basic /> */}
+                    <DeleteCampaign title={campaign.title} id={campaign.id} />
                   </Table.Cell>
                 </Table.Row>
               );

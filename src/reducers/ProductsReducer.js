@@ -29,6 +29,18 @@ import {
   EDIT_CAMPAIGN_CLICK,
   EDIT_CAMPAIGN_SUCCESS,
   EDIT_CAMPAIGN_FAILED,
+  DELETE_CATEGORY_CLICK,
+  DELETE_CATEGORY_SUCCESS,
+  DELETE_CATEGORY_FAILED,
+  DELETE_SUBCATEGORY_CLICK,
+  DELETE_SUBCATEGORY_SUCCESS,
+  DELETE_SUBCATEGORY_FAILED,
+  DELETE_PRODUCT_CLICK,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAILED,
+  DELETE_CAMPAIGN_CLICK,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_FAILED,
 } from "../actions/ProductsAction";
 
 const INITIAL_STATE = {
@@ -80,12 +92,12 @@ export const ProductsReducer = (state = INITIAL_STATE, action) => {
         redirectUrlValue: "",
       };
 
-      case FETCH_CAMPAIGN_PRODUCT_VALUES:
-        return {
-          ...state,
-          campaignProducts: action.payload,
-          redirectUrlValue: "",
-        };
+    case FETCH_CAMPAIGN_PRODUCT_VALUES:
+      return {
+        ...state,
+        campaignProducts: action.payload,
+        redirectUrlValue: "",
+      };
 
     case ADD_CATEGORY_CLICK:
       return {
@@ -269,6 +281,94 @@ export const ProductsReducer = (state = INITIAL_STATE, action) => {
         // productSubCategoryTitleErrorValue: "",
         // productSubCategoryImageErrorValue: ""
         // productsSubCategoriesErrorValues: []
+      };
+
+    case DELETE_CATEGORY_CLICK:
+      return {
+        ...state,
+      };
+
+    case DELETE_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        categoriesValues: state.categoriesValues.filter(
+          (category) => category.id != action.payload
+        ),
+      };
+
+    case DELETE_CATEGORY_FAILED:
+      console.log("ADD_CATEGORY_FAILED is running");
+      return {
+        ...state,
+        // productCategoryTitleErrorValue: "",
+        // productCategoryImageErrorValue: ""
+        // productsCategoriesErrorValues: []
+      };
+
+    case DELETE_SUBCATEGORY_CLICK:
+      return {
+        ...state,
+      };
+
+    case DELETE_SUBCATEGORY_SUCCESS:
+      return {
+        ...state,
+        subcategoriesValues: state.subcategoriesValues.filter(
+          (subcategory) => subcategory.id != action.payload
+        ),
+      };
+
+    case DELETE_SUBCATEGORY_FAILED:
+      console.log("ADD_SUBCATEGORY_FAILED is running");
+      return {
+        ...state,
+        // productCategoryTitleErrorValue: "",
+        // productCategoryImageErrorValue: ""
+        // productsCategoriesErrorValues: []
+      };
+
+    case DELETE_PRODUCT_CLICK:
+      return {
+        ...state,
+      };
+
+    case DELETE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        productsValues: state.productsValues.filter(
+          (product) => product.id != action.payload
+        ),
+      };
+
+    case DELETE_PRODUCT_FAILED:
+      console.log("ADD_PRODUCT_FAILED is running");
+      return {
+        ...state,
+        // productCategoryTitleErrorValue: "",
+        // productCategoryImageErrorValue: ""
+        // productsCategoriesErrorValues: []
+      };
+
+    case DELETE_CAMPAIGN_CLICK:
+      return {
+        ...state,
+      };
+
+    case DELETE_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        campaignsValues: state.campaignsValues.filter(
+          (campaign) => campaign.id != action.payload
+        ),
+      };
+
+    case DELETE_CAMPAIGN_FAILED:
+      console.log("ADD_CAMPAIGN_FAILED is running");
+      return {
+        ...state,
+        // productCategoryTitleErrorValue: "",
+        // productCategoryImageErrorValue: ""
+        // productsCategoriesErrorValues: []
       };
 
     default:

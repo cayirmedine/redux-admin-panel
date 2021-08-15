@@ -30,6 +30,18 @@ export const EDIT_PRODUCT_FAILED = "EDIT_PRODUCT_FAILED";
 export const EDIT_CAMPAIGN_CLICK = "EDIT_CAMPAIGN_CLICK";
 export const EDIT_CAMPAIGN_SUCCESS = "EDIT_CAMPAIGN_SUCCESS";
 export const EDIT_CAMPAIGN_FAILED = "EDIT_CAMPAIGN_FAILED";
+export const DELETE_CATEGORY_CLICK = "DELETE_CATEGORY_CLICK";
+export const DELETE_CATEGORY_SUCCESS = "DELETE_CATEGORY_SUCCESS";
+export const DELETE_CATEGORY_FAILED = "DELETE_CATEGORY_FAILED";
+export const DELETE_SUBCATEGORY_CLICK = "DELETE_SUBCATEGORY_CLICK";
+export const DELETE_SUBCATEGORY_SUCCESS = "DELETE_SUBCATEGORY_SUCCESS";
+export const DELETE_SUBCATEGORY_FAILED = "DELETE_SUBCATEGORY_FAILED";
+export const DELETE_PRODUCT_CLICK = "DELETE_PRODUCT_CLICK";
+export const DELETE_PRODUCT_SUCCESS = "DELETE_PRODUCT_SUCCESS";
+export const DELETE_PRODUCT_FAILED = "DELETE_PRODUCT_FAILED";
+export const DELETE_CAMPAIGN_CLICK = "DELETE_CAMPAIGN_CLICK";
+export const DELETE_CAMPAIGN_SUCCESS = "DELETE_CAMPAIGN_SUCCESS";
+export const DELETE_CAMPAIGN_FAILED = "DELETE_CAMPAIGN_FAILED";
 
 export const fetchCategories = () => {
   return (dispatch) => {
@@ -314,3 +326,83 @@ export const editCampaign = (campaignID, campaignFormData) => {
       );
   };
 };
+
+export const deleteCategory = (categoryId) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_CATEGORY_CLICK,
+    });
+
+    api()
+      .delete(`/categories/${categoryId}`)
+      .then(() => {
+        dispatch({
+          type: DELETE_CATEGORY_SUCCESS,
+          payload: categoryId
+        })
+      })
+      .catch((err) => dispatch({
+        type: DELETE_CATEGORY_FAILED
+      }))
+  }
+}
+
+export const deleteSubCategory = (subCategoryId) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_SUBCATEGORY_CLICK,
+    });
+
+    api()
+      .delete(`/sub-categories/${subCategoryId}`)
+      .then(() => {
+        dispatch({
+          type: DELETE_SUBCATEGORY_SUCCESS,
+          payload: subCategoryId
+        })
+      })
+      .catch((err) => dispatch({
+        type: DELETE_SUBCATEGORY_FAILED
+      }))
+  }
+}
+
+export const deleteProduct = (productId) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_PRODUCT_CLICK,
+    });
+
+    api()
+      .delete(`/products/${productId}`)
+      .then(() => {
+        dispatch({
+          type: DELETE_PRODUCT_SUCCESS,
+          payload: productId
+        })
+      })
+      .catch((err) => dispatch({
+        type: DELETE_PRODUCT_FAILED
+      }))
+  }
+}
+
+export const deleteCampaign = (campaignId) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_CAMPAIGN_CLICK,
+    });
+
+    api()
+      .delete(`/campaigns/${campaignId}`)
+      .then(() => {
+        dispatch({
+          type: DELETE_CAMPAIGN_SUCCESS,
+          payload: campaignId
+        })
+      })
+      .catch((err) => dispatch({
+        type: DELETE_CAMPAIGN_FAILED
+      }))
+  }
+}

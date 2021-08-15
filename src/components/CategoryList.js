@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchCategories } from "../actions/ProductsAction";
 import { Button, Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import DeleteCategory from "./DeleteCategory";
 
 class CategoryList extends Component {
   componentDidMount() {
@@ -58,7 +59,8 @@ class CategoryList extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <Button icon="red trash alternate outline" basic />
+                    {/* <Button icon="red trash alternate outline" basic /> */}
+                    <DeleteCategory title={category.title} id={category.id}/>
                   </Table.Cell>
                 </Table.Row>
               );

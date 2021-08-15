@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchSubCategories } from "../actions/ProductsAction";
 import { Button, Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import DeleteSubCat from "./DeleteSubCat";
 
 class SubCatList extends Component {
   componentDidMount() {
@@ -49,7 +50,8 @@ class SubCatList extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <Button icon="red trash alternate outline" basic />
+                    {/* <Button icon="red trash alternate outline" basic /> */}
+                    <DeleteSubCat title={subcategory.title} id={subcategory.id}/>
                   </Table.Cell>
                 </Table.Row>
               );
