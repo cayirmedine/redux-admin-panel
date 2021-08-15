@@ -10,8 +10,6 @@ class AddSubCat extends Component {
     cat_id: null,
   };
 
-  categoryOptions = [];
-
   componentDidMount() {
     this.props.fetchCategories();
   }

@@ -1,8 +1,8 @@
-import { api } from "../api";
 import React, { Component } from "react";
-import { Button, Form, Segment } from "semantic-ui-react";
-// import Select from "react-select";
-// let formData = new FormData();
+import { connect } from "react-redux";
+import { editSubCategory, fetchCategories } from "../actions/ProductsAction";
+import { Button, Form, Segment, Input } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
 
 class EditSubCat extends Component {
   state = {
@@ -10,59 +10,45 @@ class EditSubCat extends Component {
     cat_id: this.props.location.cat_id
   };
 
-  options = [];
-
   componentDidMount() {
-    api()
-      .get("/categories")
-      .then((res) => {
-        res.data.map((cat) =>
-          this.options.push({
-            id: cat.id,
-            text: cat.title,
-            value: cat.id,
-          })
-        );
-      });
+    this.props.fetchCategories();
   }
 
-  onTitleChange = (e) => {
-    this.setState({ title: e.target.value });
+  onSubCatTitleChange = (e, { value }) => {
+    this.setState({ title: value });
   };
 
-  onCatIDChange = (e, { value }) => {
+  onSubCatsCatIDChange = (e, { value }) => {
     console.log(e);
     console.log(e.target.id);
     this.setState({ cat_id: value });
   };
 
-  onFormSubmit = (event) => {
+  onSubCatFormSubmit = (event) => {
     console.log("State:", this.state);
 
     event.preventDefault();
-    api()
-      .put(`/sub-categories/${this.props.match.params.id}`, this.state)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.props.editSubCategory(this.props.match.params.id, this.state);
   };
 
   render() {
+    const { productSubCategoriesSpinnerValue, redirectUrlValue } = this.props;
+
+    if (redirectUrlValue) {
+      return <Redirect to={redirectUrlValue} />;
+    }
     return (
       <div
         style={{ marginTop: "1.5em", marginLeft: "1.5em", marginRight: "10em" }}
       >
         <Segment raised>
-          <Form>
+          <Form loading= {productSubCategoriesSpinnerValue}>
             <Form.Field>
               <label>Title</label>
-              <input
+              <Input
                 placeholder={this.props.location.title}
                 name="title"
-                onChange={this.onTitleChange}
+                onChange={this.onSubCatTitleChange}
               />
             </Form.Field>
             <Form.Field>
@@ -70,12 +56,12 @@ class EditSubCat extends Component {
                 fluid
                 name="cat_id"
                 label="Category"
-                options={this.options}
+                options={this.props.categoryOptions}
                 placeholder="Category"
-                onChange={this.onCatIDChange}
+                onChange={this.onSubCatsCatIDChange}
               />
             </Form.Field>
-            <Button type="submit" onClick={this.onFormSubmit}>
+            <Button type="submit" onClick={this.onSubCatFormSubmit}>
               Submit
             </Button>
           </Form>
@@ -85,4 +71,30 @@ class EditSubCat extends Component {
   }
 }
 
-export default EditSubCat;
+const mapStateToProps = state => {
+  var _ = require("lodash");
+
+  let categoryOptions = _.map(
+    state.ProductsReducer.categoriesValues,
+    (val) => ({
+      id: val.id,
+      text: val.title,
+      value: val.id,
+    })
+  );
+
+  const {
+    productSubCategoriesSpinnerValue,
+    redirectUrlValue,
+    categoriesValues,
+  } = state.ProductsReducer;
+
+  return {
+    productSubCategoriesSpinnerValue,
+    redirectUrlValue,
+    categoriesValues,
+    categoryOptions
+  };
+}
+
+export default connect(mapStateToProps, { fetchCategories, editSubCategory })(EditSubCat);

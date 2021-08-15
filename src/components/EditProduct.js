@@ -1,134 +1,152 @@
-import { api } from "../api";
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import {
+  editProduct,
+  fetchCategories,
+  fetchCatsSubCats,
+} from "../actions/ProductsAction";
 import { Button, Form, Segment, Input, Label } from "semantic-ui-react";
-// import Select from "react-select";
+import { Redirect } from "react-router-dom";
+
 let formData = new FormData();
 
 class EditProduct extends Component {
   state = {
-    title: this.props.location.title,
-    unitPrice: this.props.location.unitPrice,
-    description: this.props.location.description,
-    cat_id: this.props.location.cat_id,
-    subCat_id: this.props.location.subCat_id,
-    images: [],
-    optionsCat: [],
-    optionsSubCat: [],
+    productTitle: this.props.location.title,
+    productUnitPrice: this.props.location.unitPrice,
+    productDescription: this.props.location.description,
+    productCatID: this.props.location.cat_id,
+    productSubCatID: this.props.location.subCat_id,
   };
 
   fileArr = [];
 
   componentDidMount() {
-    api()
-      .get("/categories")
-      .then((res) => {
-        res.data.map((cat) =>
-          this.state.optionsCat.push({
-            id: cat.id,
-            text: cat.title,
-            value: cat.id,
-          })
-        );
-      });
+    // api()
+    //   .get("/categories")
+    //   .then((res) => {
+    //     res.data.map((cat) =>
+    //       this.state.optionsCat.push({
+    //         id: cat.id,
+    //         text: cat.title,
+    //         value: cat.id,
+    //       })
+    //     );
+    //   });
+    this.props.fetchCategories();
   }
 
-  onTitleChange = (e) => {
-    this.setState({ title: e.target.value });
+  onProductTitleChange = (e, { value }) => {
+    this.setState({ productTitle: value });
   };
 
-  onUnitPriceChange = (e) => {
-    this.setState({ unitPrice: e.target.value });
+  onProductUnitPriceChange = (e, { value }) => {
+    this.setState({ productUnitPrice: value });
   };
 
-  onDescriptionChange = (e) => {
-    this.setState({ description: e.target.value });
+  onProductDescriptionChange = (e, { value }) => {
+    this.setState({ productDescription: value });
   };
 
-  onCatIDChange = async (e, { value }) => {
+  onProductCatIDChange = async (e, { value }) => {
     console.log(e);
-    await this.setState({ cat_id: value });
+    await this.setState({ productCatID: value });
 
-    console.log(this.state.cat_id);
+    console.log(this.state.productCatID);
 
-    await api()
-      .get(`/sub-categories-cat/${this.state.cat_id}`)
-      .then((res) => {
-        res.data.map((subCat) =>
-          this.state.optionsSubCat.push({
-            id: subCat.id,
-            text: subCat.title,
-            value: subCat.id,
-          })
-        );
-      });
+    // await api()
+    //   .get(`/sub-categories-cat/${this.state.productCatID}`)
+    //   .then((res) => {
+    //     res.data.map((subCat) =>
+    //       this.state.optionsSubCat.push({
+    //         id: subCat.id,
+    //         text: subCat.title,
+    //         value: subCat.id,
+    //       })
+    //     );
+    //   });
+
+    this.props.fetchCatsSubCats(this.state.productCatID);
   };
 
-  onSubCatIDChange = async (e, { value }) => {
+  onProductSubCatIDChange = async (e, { value }) => {
     console.log(e);
-    await this.setState({ subCat_id: value });
-    await console.log(this.state.subCat_id);
+    await this.setState({ productSubCatID: value });
+    await console.log(this.state.productSubCatID);
   };
 
-  handleImages = async (e) => {
+  handleProductImages = async (e) => {
     if (e.target && e.target.files) {
       this.fileArr = [...e.target.files];
       console.log("File Array:", this.fileArr);
     }
   };
 
-  onFormSubmit = async (event) => {
-    await formData.set("title", this.state.title);
-    await formData.set("unitPrice", this.state.unitPrice);
-    await formData.set("description", this.state.description);
-    await formData.set("cat_id", this.state.cat_id);
-    await formData.set("subCat_id", this.state.subCat_id);
+  onProductFormSubmit = async (event) => {
+    await formData.set("title", this.state.productTitle);
+    await formData.set("unitPrice", this.state.productUnitPrice);
+    await formData.set("description", this.state.productDescription);
+    await formData.set("cat_id", this.state.productCatID);
+    await formData.set("subCat_id", this.state.productSubCatID);
     await this.fileArr.map((file) => formData.append("images", file));
 
     console.log("State:", this.state);
 
     event.preventDefault();
-    await api()
-      .put(`/products/${this.props.match.params.id}`, formData, {
-        headers: { "content-type": "multipart/form-data" },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // await api()
+    //   .put(`/products/${this.props.match.params.id}`, formData, {
+    //     headers: { "content-type": "multipart/form-data" },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    await this.props.editProduct(this.props.match.params.id, formData);
 
     await formData.set("images", null);
   };
 
   render() {
+    const { productSpinnerValue, redirectUrlValue } = this.props;
+
+    if (redirectUrlValue) {
+      return <Redirect to={redirectUrlValue} />;
+    }
     return (
       <div
         style={{ marginTop: "1.5em", marginLeft: "1.5em", marginRight: "10em" }}
       >
         <Segment raised>
-          <Form>
+          <Form loading={productSpinnerValue}>
             <Form.Field>
               <label>Title</label>
-              <input
+              <Input
                 placeholder={this.props.location.title}
                 name="title"
-                onChange={this.onTitleChange}
+                onChange={this.onProductTitleChange}
               />
             </Form.Field>
             <Form.Field>
               <label>Unit Price</label>
-              <Input labelPosition="right" type="text" placeholder={this.props.location.unitPrice} onChange={this.onUnitPriceChange}>
+              <Input
+                labelPosition="right"
+                type="text"
+                placeholder={this.props.location.unitPrice}
+                onChange={this.onProductUnitPriceChange}
+              >
                 <input />
                 <Label>₺</Label>
               </Input>
             </Form.Field>
             <Form.Field>
               <label>Description</label>
-              <input
+              <Input
                 placeholder={this.props.location.description}
                 name="description"
-                onChange={this.onDescriptionChange}
+                onChange={this.onProductDescriptionChange}
               />
             </Form.Field>
             <Form.Field>
@@ -136,9 +154,9 @@ class EditProduct extends Component {
                 fluid
                 name="cat_id"
                 label="Category"
-                options={this.state.optionsCat}
+                options={this.props.productOptionsCat}
                 placeholder="Category"
-                onChange={this.onCatIDChange}
+                onChange={this.onProductCatIDChange}
               />
             </Form.Field>
             <Form.Field>
@@ -146,9 +164,9 @@ class EditProduct extends Component {
                 fluid
                 name="subCat_id"
                 label="SubCategory"
-                options={this.state.optionsSubCat}
+                options={this.props.productOptionsSubCat}
                 placeholder="SubCategory"
-                onChange={this.onSubCatIDChange}
+                onChange={this.onProductSubCatIDChange}
               />
             </Form.Field>
             <Form.Field>
@@ -158,10 +176,10 @@ class EditProduct extends Component {
                 name="images"
                 multiple
                 accept="image/*"
-                onChange={this.handleImages}
+                onChange={this.handleProductImages}
               />
             </Form.Field>
-            <Button type="submit" onClick={this.onFormSubmit}>
+            <Button type="submit" onClick={this.onProductFormSubmit}>
               Submit
             </Button>
           </Form>
@@ -171,4 +189,45 @@ class EditProduct extends Component {
   }
 }
 
-export default EditProduct;
+const mapStateToProps = (state) => {
+  var _ = require("lodash");
+  const {
+    productSpinnerValue,
+    redirectUrlValue,
+    categoriesValues,
+    catSubCategoriesValues,
+  } = state.ProductsReducer;
+
+  let productOptionsCat = _.map(
+    state.ProductsReducer.categoriesValues,
+    (val) => ({
+      id: val.id,
+      text: val.title,
+      value: val.id,
+    })
+  );
+
+  let productOptionsSubCat = _.map(
+    state.ProductsReducer.catSubCategoriesValues,
+    (val) => ({
+      id: val.id,
+      text: val.title,
+      value: val.id,
+    })
+  );
+
+  return {
+    productSpinnerValue,
+    redirectUrlValue,
+    categoriesValues,
+    catSubCategoriesValues,
+    productOptionsCat,
+    productOptionsSubCat,
+  };
+};
+
+export default connect(mapStateToProps, {
+  editProduct,
+  fetchCategories,
+  fetchCatsSubCats,
+})(EditProduct);

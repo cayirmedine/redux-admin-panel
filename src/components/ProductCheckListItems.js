@@ -3,38 +3,35 @@ import { connect } from "react-redux";
 import { Checkbox, Table } from "semantic-ui-react";
 
 class ProductCheckListItems extends Component {
-//   constructor(props) {
-//     super();
-//     console.log(props);
-//   }
 
   state = {
-    isProductChecked: false,
-  };
+    isProductChecked: this.props.campaignProducts.includes(this.props.product.id),
+  }
 
-  handleClick = (e, { checked, value }) => {
+  handleClick = async (e, { value, checked }) => {
     if (checked) {
-      this.props.campaignProducts.push(value);
+      await this.setState({ isProductChecked: true });
+      await this.props.campaignProducts.push(value);
       console.log(value);
+      console.log(this.state.isProductChecked);
     } else {
       if (this.props.campaignProducts.includes(value)) {
+        await this.setState({ isProductChecked: false });
         let index = this.props.campaignProducts.indexOf(value);
-        this.props.campaignProducts.splice(index, 1);
+        await this.props.campaignProducts.splice(index, 1);
+        console.log(this.state.isProductChecked);
       }
     }
   };
-
-//   toggle = () =>
-//     this.setState((prevState) => ({ isProductChecked: !prevState.isProductChecked }));
 
   render() {
     return (
       <Table.Row key={this.props.product.id}>
         <Table.Cell>
           <Checkbox
-            onClick={this.handleClick}
+            onChange={this.handleClick}
             // onChange={this.toggle}
-            // checked={this.state.isProductChecked}
+            checked={this.state.isProductChecked}
             value={this.props.product.id}
           />
         </Table.Cell>
@@ -45,11 +42,11 @@ class ProductCheckListItems extends Component {
   }
 }
 
-const mapStateToProps = state => {
-    const { campaignProducts } = state.ProductsReducer;
-    return {
-        campaignProducts
-    }
-}
+const mapStateToProps = (state) => {
+  const { campaignProducts } = state.ProductsReducer;
+  return {
+    campaignProducts,
+  };
+};
 
 export default connect(mapStateToProps)(ProductCheckListItems);
