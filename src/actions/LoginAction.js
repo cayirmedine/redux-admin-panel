@@ -6,6 +6,9 @@ export const LOGIN_FAILED = "LOGIN_FAILED";
 export const GOOGLE_LOGIN_CLICK = "GOOGLE_LOGIN_CLICK";
 export const GOOGLE_LOGIN_SUCCESS = "GOOGLE_LOGIN_SUCCESS";
 export const GOOGLE_LOGIN_FAILED = "GOOGLE_LOGIN_FAILED";
+export const FACEBOOK_LOGIN_CLICK = "FACEBOOK_LOGIN_CLICK";
+export const FACEBOOK_LOGIN_SUCCESS = "FACEBOOK_LOGIN_SUCCESS";
+export const FACEBOOK_LOGIN_FAILED = "FACEBOOK_LOGIN_FAILED";
 
 export const logIn = (userValues) => {
   return (dispatch) => {
@@ -57,3 +60,28 @@ export const googleLogIn = (token) => {
       });
   };
 };
+
+export const facebookLogIn = (facebookLogInInfo) => {
+  return (dispatch) => {
+    dispatch({
+      type: FACEBOOK_LOGIN_CLICK,
+    });
+
+    axios
+      .post("http://localhost:5000/auth/facebook-signin", facebookLogInInfo)
+      .then(async (response) => {
+        axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.data.access_token;
+
+        dispatch({
+          type: FACEBOOK_LOGIN_SUCCESS,
+          payload: { data: response.data, redirectUrl: "/dashboard" },
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: FACEBOOK_LOGIN_FAILED,
+        });
+      });
+  };
+};
+

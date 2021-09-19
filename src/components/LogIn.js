@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login";
+
 import { connect } from "react-redux";
-import { logIn, googleLogIn } from "../actions/LoginAction";
+import { logIn, googleLogIn, facebookLogIn } from "../actions/LoginAction";
 import {
   Button,
   Segment,
@@ -30,7 +32,13 @@ class LogIn extends Component {
   responseGoogle = (response) => {
     console.log(response);
     console.log(response.tokenObj.id_token);
-    this.props.googleLogIn({ token: response.tokenObj.id_token })
+    this.props.googleLogIn({ token: response.tokenObj.id_token });
+  };
+
+  responseFacebook = (response) => {
+    console.log(response);
+    console.log(response.signedRequest);
+    this.props.facebookLogIn({ fullName: response.name, email: response.email, token: response.accessToken })
   };
 
   onFormSubmit = (event) => {
@@ -38,11 +46,7 @@ class LogIn extends Component {
   };
 
   render() {
-    const {
-      loginSpinnerValue,
-      loginErrorValue,
-      redirectUrlValue,
-    } = this.props;
+    const { loginSpinnerValue, loginErrorValue, redirectUrlValue } = this.props;
     if (redirectUrlValue) {
       return <Redirect to={redirectUrlValue} />;
     }
@@ -108,6 +112,13 @@ class LogIn extends Component {
                   cookiePolicy={"single_host_origin"}
                 />
               </div>
+              <div>
+                <FacebookLogin
+                  appId="384353386508756"
+                  fields="name,email"
+                  callback={this.responseFacebook}
+                />
+              </div>
               <Button
                 type="submit"
                 primary
@@ -135,4 +146,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { logIn, googleLogIn })(LogIn);
+export default connect(mapStateToProps, { logIn, googleLogIn, facebookLogIn })(LogIn);

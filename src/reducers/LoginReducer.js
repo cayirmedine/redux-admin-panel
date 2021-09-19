@@ -5,6 +5,9 @@ import {
   GOOGLE_LOGIN_CLICK,
   GOOGLE_LOGIN_SUCCESS,
   GOOGLE_LOGIN_FAILED,
+  FACEBOOK_LOGIN_CLICK,
+  FACEBOOK_LOGIN_SUCCESS,
+  FACEBOOK_LOGIN_FAILED,
 } from "../actions/LoginAction";
 
 const INITIAL_STATE = {
@@ -48,6 +51,23 @@ export const LoginReducer = (state = INITIAL_STATE, action) => {
       };
 
     case GOOGLE_LOGIN_FAILED:
+      return {
+        ...state,
+        loginErrorValue: action.payload,
+      };
+
+    case FACEBOOK_LOGIN_CLICK:
+      return {
+        ...state,
+      };
+
+    case FACEBOOK_LOGIN_SUCCESS:
+      return {
+        ...state,
+        redirectUrlValue: action.payload.redirectUrl,
+      };
+
+    case FACEBOOK_LOGIN_FAILED:
       return {
         ...state,
         loginErrorValue: action.payload,
