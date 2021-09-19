@@ -1,4 +1,5 @@
 import { api } from "../api";
+import axios from "axios";
 
 export const FETCH_CATEGORY_VALUES = "FETCH_CATEGORY_VALUES";
 export const FETCH_SUBCATEGORY_VALUES = "FETCH_SUBCATEGORY_VALUES";
@@ -43,14 +44,25 @@ export const DELETE_CAMPAIGN_CLICK = "DELETE_CAMPAIGN_CLICK";
 export const DELETE_CAMPAIGN_SUCCESS = "DELETE_CAMPAIGN_SUCCESS";
 export const DELETE_CAMPAIGN_FAILED = "DELETE_CAMPAIGN_FAILED";
 
-export const fetchCategories = () => {
+export const fetchCategories = (page) => {
   return (dispatch) => {
-    api()
-      .get("/categories")
-      .then((response) => {
+    // api()
+    //   .get("/categories")
+    //   .then((response) => {
+    //     dispatch({
+    //       type: FETCH_CATEGORY_VALUES,
+    //       payload: response.data.data,
+    //     });
+    //   })
+    axios({
+      method: "get",
+      url: "http://localhost:5000/admin/product/categories",
+      params: { "page": page || 1 },
+    })
+      .then((result) => {
         dispatch({
           type: FETCH_CATEGORY_VALUES,
-          payload: response.data,
+          payload: result.data.data,
         });
       })
       .catch((error) => {
@@ -319,11 +331,12 @@ export const editCampaign = (campaignID, campaignFormData) => {
           payload: { data: response.data, redirectUrl: "/campaigns" },
         });
       })
-      .catch((err) =>
+      .catch((err) => {
+        console.log(err.reponse);
         dispatch({
           type: EDIT_CAMPAIGN_FAILED,
-        })
-      );
+        });
+      });
   };
 };
 
@@ -338,14 +351,16 @@ export const deleteCategory = (categoryId) => {
       .then(() => {
         dispatch({
           type: DELETE_CATEGORY_SUCCESS,
-          payload: categoryId
-        })
+          payload: categoryId,
+        });
       })
-      .catch((err) => dispatch({
-        type: DELETE_CATEGORY_FAILED
-      }))
-  }
-}
+      .catch((err) =>
+        dispatch({
+          type: DELETE_CATEGORY_FAILED,
+        })
+      );
+  };
+};
 
 export const deleteSubCategory = (subCategoryId) => {
   return (dispatch) => {
@@ -358,14 +373,16 @@ export const deleteSubCategory = (subCategoryId) => {
       .then(() => {
         dispatch({
           type: DELETE_SUBCATEGORY_SUCCESS,
-          payload: subCategoryId
-        })
+          payload: subCategoryId,
+        });
       })
-      .catch((err) => dispatch({
-        type: DELETE_SUBCATEGORY_FAILED
-      }))
-  }
-}
+      .catch((err) =>
+        dispatch({
+          type: DELETE_SUBCATEGORY_FAILED,
+        })
+      );
+  };
+};
 
 export const deleteProduct = (productId) => {
   return (dispatch) => {
@@ -378,14 +395,16 @@ export const deleteProduct = (productId) => {
       .then(() => {
         dispatch({
           type: DELETE_PRODUCT_SUCCESS,
-          payload: productId
-        })
+          payload: productId,
+        });
       })
-      .catch((err) => dispatch({
-        type: DELETE_PRODUCT_FAILED
-      }))
-  }
-}
+      .catch((err) =>
+        dispatch({
+          type: DELETE_PRODUCT_FAILED,
+        })
+      );
+  };
+};
 
 export const deleteCampaign = (campaignId) => {
   return (dispatch) => {
@@ -398,11 +417,13 @@ export const deleteCampaign = (campaignId) => {
       .then(() => {
         dispatch({
           type: DELETE_CAMPAIGN_SUCCESS,
-          payload: campaignId
-        })
+          payload: campaignId,
+        });
       })
-      .catch((err) => dispatch({
-        type: DELETE_CAMPAIGN_FAILED
-      }))
-  }
-}
+      .catch((err) =>
+        dispatch({
+          type: DELETE_CAMPAIGN_FAILED,
+        })
+      );
+  };
+};

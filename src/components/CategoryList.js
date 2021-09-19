@@ -7,7 +7,7 @@ import DeleteCategory from "./DeleteCategory";
 
 class CategoryList extends Component {
   componentDidMount() {
-    this.props.fetchCategories();
+    this.props.fetchCategories(1);
   }
 
   render() {

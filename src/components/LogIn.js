@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import GoogleLogin from "react-google-login";
 import { connect } from "react-redux";
-import { logIn } from "../actions/LoginAction";
+import { logIn, googleLogIn } from "../actions/LoginAction";
 import {
   Button,
   Segment,
@@ -14,24 +15,34 @@ import { Redirect } from "react-router-dom";
 
 class LogIn extends Component {
   state = {
-    username: "",
+    phone: "",
     password: "",
   };
 
-  onUserNameChange = (e, { value }) => {
-    this.setState({ username: value });
+  onPhoneChange = (e, { value }) => {
+    this.setState({ phone: value });
   };
 
   onPasswordChange = (e, { value }) => {
     this.setState({ password: value });
   };
 
+  responseGoogle = (response) => {
+    console.log(response);
+    console.log(response.tokenObj.id_token);
+    this.props.googleLogIn({ token: response.tokenObj.id_token })
+  };
+
   onFormSubmit = (event) => {
-    this.props.logIn(this.state.username, this.state.password);
+    this.props.logIn(this.state);
   };
 
   render() {
-    const { loginSpinnerValue, loginErrorValue, redirectUrlValue } = this.props;
+    const {
+      loginSpinnerValue,
+      loginErrorValue,
+      redirectUrlValue,
+    } = this.props;
     if (redirectUrlValue) {
       return <Redirect to={redirectUrlValue} />;
     }
@@ -52,26 +63,28 @@ class LogIn extends Component {
                 <Icon name="cart" circular />
                 <Header.Content>BirTakım Market</Header.Content>
               </Header>
-              <Message negative hidden={!loginErrorValue} style={{
+              <Message
+                negative
+                hidden={!loginErrorValue}
+                style={{
                   marginLeft: "4em",
                   marginRight: "4em",
                   marginTop: "1em",
-                }}>
-                <Message.Header>
-                  {loginErrorValue}
-                </Message.Header>
+                }}
+              >
+                <Message.Header>{loginErrorValue}</Message.Header>
               </Message>
               <Input
                 icon="user"
                 iconPosition="left"
-                placeholder="Username"
+                placeholder="Phone"
                 fluid
                 style={{
                   marginLeft: "4em",
                   marginRight: "4em",
                   marginTop: "3em",
                 }}
-                onChange={this.onUserNameChange}
+                onChange={this.onPhoneChange}
               />
               <Input
                 icon="lock"
@@ -87,6 +100,14 @@ class LogIn extends Component {
                 }}
                 onChange={this.onPasswordChange}
               />
+              <div>
+                <GoogleLogin
+                  clientId="433932131364-qbntk6s77q5k6n9vu1ljd8hm99q79mcf.apps.googleusercontent.com"
+                  onSuccess={this.responseGoogle}
+                  onFailure={this.responseGoogle}
+                  cookiePolicy={"single_host_origin"}
+                />
+              </div>
               <Button
                 type="submit"
                 primary
@@ -114,4 +135,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { logIn })(LogIn);
+export default connect(mapStateToProps, { logIn, googleLogIn })(LogIn);
